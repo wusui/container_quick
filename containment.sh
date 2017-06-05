@@ -7,13 +7,8 @@ do_setup() {
 }
 
 cephnodes=$*
-first=
-for x in $cephnodes
-do
-    if [ ${#first} -eq 0 ]; then    
-        first=$x   
-    fi
-done
+zarray=($*)
+first=${zarray[0]}
 for x in $cephnodes
 do 
     do_setup $x setup 
