@@ -7,6 +7,13 @@ do_setup() {
 }
 
 cephnodes=$*
+first=
+for x in $cephnodes
+do
+    if [ ${#first} -eq 0 ]; then    
+        first=$x   
+    fi
+done
 for x in $cephnodes
 do 
     do_setup $x setup 
@@ -31,13 +38,6 @@ do
     do
         ssh $x ssh -oStrictHostKeyChecking=no $y hostname -s
     done
-done
-first=
-for x in $cephnodes
-do
-    if [ ${#first} -eq 0 ]; then    
-        first=$x   
-    fi
 done
 scp epel-release-latest-7.noarch.rpm $first:/tmp
 do_setup $first install
@@ -75,4 +75,3 @@ echo "">> /tmp/done.msg
 echo "ansible-playbook --skip-tags=with_pkg site-docker.yml">> /tmp/done.msg
 >> /tmp/done.msg
 cat /tmp/done.msg
-

@@ -1,10 +1,4 @@
 #! /bin/bash -fv
-yum install docker -y
-service docker start
-sed -i -e "s|.*INSECURE_REGISTRY=.*|INSECURE_REGISTRY='--insecure-registry brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888'|" /etc/sysconfig/docker
-service docker restart
-wusui@magna002:~/container_quick.git$ cat editansible.sh 
-#! /bin/bash -fv
 d=/usr/share/ceph-ansible
 sudo chown ubuntu:ubuntu ${d}
 sudo chown ubuntu:ubuntu ${d}/*
