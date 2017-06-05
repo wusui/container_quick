@@ -1,4 +1,8 @@
 #! /bin/bash -fv
+#
+# Modify the yml files in /usr/share/ceph-ansible to work for the downstream
+# nodes.
+#
 d=/usr/share/ceph-ansible
 sudo chown ubuntu:ubuntu ${d}
 sudo chown ubuntu:ubuntu ${d}/*
