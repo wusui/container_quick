@@ -1,4 +1,11 @@
 #! /bin/bash -fv
+#
+# enable rpms using the subscription managers.
+#
+# make sure that the firewall is set correctly.
+#
+# start ntpd
+#
 sed -i -e 's,^hostname *=.*,hostname = subscription.rhn.stage.redhat.com,;s,baseurl *=.*,baseurl= http://cdn.stage.redhat.com,' /etc/rhsm/rhsm.conf
 subscription-manager register --username=qa@redhat.com --password=redhatqa
 subscription-manager attach --pool=8a85f9823e3d5e43013e3ddd4e2a0977
