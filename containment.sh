@@ -9,6 +9,7 @@ do_setup() {
     ssh $1 sudo /tmp/$2.sh
 }
 
+export epel_release=${epel_release:-'epel-release-latest-7.noarch.rpm'}
 #
 # cephnodes -- list of sites passed to this script
 # first -- first site in cephnodes
@@ -17,11 +18,14 @@ cephnodes=$*
 zarray=($*)
 first=${zarray[0]}
 
+rm -rf /tmp/ahosts
 scp ${first}:/etc/ansible/hosts /tmp/ahosts
-export mchk=`grep "\[mons\]" /tmp/ahosts | wc -l`
-if [ $mchk -gt 0 ]; then
-    echo "Remove [mons] and [osds] entries from /etc/ansible/hosts on $first"
-    exit -1
+if [ -f /tmp/ahosts ]; then
+    mchk=`grep "\[mons\]" /tmp/ahosts | wc -l`
+    if [ $mchk -gt 0 ]; then
+        echo "Remove [mons] and [osds] entries from /etc/ansible/hosts on $first"
+        exit -1
+    fi
 fi
 
 #
@@ -60,7 +64,7 @@ done
 #
 # Remotely run install.sh on the administrative site.
 #
-scp epel-release-latest-7.noarch.rpm $first:/tmp
+scp ${epel_release} $first:/tmp
 do_setup $first install
 
 #
