@@ -10,8 +10,6 @@ wget ${download_node} 2>&1 | tee /tmp/downloads
 z=`grep Saving /tmp/downloads | sed 's/.*: .//' | sed 's/.$//'`
 latestversion=`python /tmp/parsePackages.py ${z} ceph-ansible`
 lastansible=`python /tmp/parsePackages.py ${z} ansible`
-echo $latestversion
-echo $lastansible
 sudo yum install -y /tmp/${epel_release} 
 sudo yum install -y PyYAML python-httplib2 python-jinja2 python-keyczar python-paramiko python-passlib sshpass
 sudo rpm -ivh ${download_node}${lastansible}
