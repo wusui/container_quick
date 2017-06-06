@@ -3,13 +3,13 @@
 #
 # Remotely run a script that is in this directory.
 #
+
 do_setup() {
     scp $2.sh $1:/tmp
     ssh $1 sudo chmod 0777 /tmp/$2.sh
     ssh $1 sudo /tmp/$2.sh
 }
 
-export epel_release=${epel_release:-'epel-release-latest-7.noarch.rpm'}
 #
 # cephnodes -- list of sites passed to this script
 # first -- first site in cephnodes
@@ -27,6 +27,9 @@ if [ -f /tmp/ahosts ]; then
         exit -1
     fi
 fi
+
+epel_release=${epel_release:-'epel-release-latest-7.noarch.rpm'}
+scp ${epel_release} ${first}:/tmp
 
 #
 # Run setup.sh on all sites
@@ -64,7 +67,7 @@ done
 #
 # Remotely run install.sh on the administrative site.
 #
-scp ${epel_release} $first:/tmp
+scp parsePackages.py ${first}:/tmp
 do_setup $first install
 
 #

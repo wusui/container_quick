@@ -8,8 +8,6 @@ Prior to running this, make sure that there are no previous [mons] or [osds] sec
 
 Also, there should be a copy of the latest epel repo in the local directory (currently use epel-release-latest-7.noarch.rpm extracted from http://dl.fedoraproject.org/pub/epel)
 
-Tunable values (exported bash variables):
+Tunable values (bash variables):
     epel_release: name of the local epl file to use -- defaults to 'epel-release-latest-7.noarch.rpm'
-    lastansible: latest version of ansible -- defaults to '2.2.3.0-1'
-    latestversion: latest ceph-ansible version number -- defaults to '2.2.8-1'
-
+    download_node: url of the package diretory -- defaults to 'http://download-node-02.eng.bos.redhat.com/rcm-guest/ceph-drops/auto/rhscon-2-rhel-7-compose/latest-RHSCON-2-RHEL-7/compose/Installer/x86_64/os/Packages/'
