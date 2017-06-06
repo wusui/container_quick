@@ -36,6 +36,7 @@ class Parser(HTMLParser, object):
 import sys
 if __name__ == "__main__":
     """
+    Find an rpm and print it's name
     """
     if len(sys.argv) != 3:
         print "Usage python parsePackages <url-data> <name-of-file>"
