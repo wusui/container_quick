@@ -105,7 +105,7 @@ done
 #  Print instructions for the user to run containers.
 #
 rm -rf /tmp/done.msg
-echo "\e[1;33m********************************************************************"> /tmp/done.msg
+echo "********************************************************************"> /tmp/done.msg
 echo "Finished with the setup of containers.">> /tmp/done.msg
 echo "Go to ${first} and cd to /usr/share/ceph-ansible Then run">> /tmp/done.msg
 echo "">> /tmp/done.msg
@@ -113,6 +113,6 @@ echo "sudo docker pull brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/rhce
 echo "">> /tmp/done.msg
 echo "followed by:">> /tmp/done.msg
 echo "">> /tmp/done.msg
-echo "ansible-playbook --skip-tags=with_pkg site-docker.yml\e[0m" >> /tmp/done.msg
+echo "ansible-playbook --skip-tags=with_pkg site-docker.yml" >> /tmp/done.msg
 >> /tmp/done.msg
 cat /tmp/done.msg
