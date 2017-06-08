@@ -1,4 +1,4 @@
-#! /bin/bash -fv
+#! /bin/bash -f
 #
 # Modify the yml files in /usr/share/ceph-ansible to work for the downstream
 # nodes.

@@ -1,4 +1,4 @@
-#! /bin/bash -fv
+#! /bin/bash -f
 #
 # This should run on only one machine (the first listed in the containment.sh
 # parameters).  It installs the epel rpm, then installs the required python

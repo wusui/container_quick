@@ -1,4 +1,4 @@
-#! /bin/bash -fv
+#! /bin/bash -f
 #
 # Make sure docker is installed and running.  This should end up being
 # performed on all sites

@@ -1,4 +1,4 @@
-#! /bin/bash -fv
+#! /bin/bash -f
 
 #
 # Remotely run a script that is in this directory.
@@ -18,18 +18,14 @@ cephnodes=$*
 zarray=($*)
 first=${zarray[0]}
 
-rm -rf /tmp/ahosts
-scp ${first}:/etc/ansible/hosts /tmp/ahosts
-if [ -f /tmp/ahosts ]; then
-    mchk=`grep "\[mons\]" /tmp/ahosts | wc -l`
-    if [ $mchk -gt 0 ]; then
-        echo "Remove [mons] and [osds] entries from /etc/ansible/hosts on $first"
-        exit -1
-    fi
-fi
-
 epel_release=${epel_release:-'epel-release-latest-7.noarch.rpm'}
+if [ ! -f ${epel_release} ]; then
+    echo "File ${epel_release} does not exist"
+    exit -1
+fi
 scp ${epel_release} ${first}:/tmp
+echo "sudo rm -rf /etc/ansible/hosts" | ssh $first
+
 
 #
 # Run setup.sh on all sites

@@ -1,4 +1,4 @@
-#! /bin/bash -fv
+#! /bin/bash -f
 #
 # enable rpms using the subscription managers.
 #
