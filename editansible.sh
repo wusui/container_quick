@@ -3,6 +3,7 @@
 # Modify the yml files in /usr/share/ceph-ansible to work for the downstream
 # nodes.
 #
+docker_candidate=${docker_candidate:-'ceph-2-rhel-7-docker-candidate-20170516014056'}
 d=/usr/share/ceph-ansible
 sudo chown ubuntu:ubuntu ${d}
 sudo chown ubuntu:ubuntu ${d}/*
@@ -18,7 +19,7 @@ sed -i -e 's|#.*fetch_directory: .*|fetch_directory: ~/ceph-ansible-keys|' ${d}/
 sed -i -e 's|#.*monitor_interface: .*|monitor_interface: eno1|' ${d}/group_vars/all.yml
 sed -i -e 's|#public_network: .*|public_network: 10.8.128.0/21|' ${d}/group_vars/all.yml
 sed -i -e 's|#ceph_docker_image: .*|ceph_docker_image: rhceph|' ${d}/group_vars/all.yml
-sed -i -e 's|#ceph_docker_image_tag: .*|ceph_docker_image_tag: ceph-2-rhel-7-docker-candidate-20170516014056|' ${d}/group_vars/all.yml
+sed -i -e "s|#ceph_docker_image_tag: .*|ceph_docker_image_tag: ${docker_candidate}|" ${d}/group_vars/all.yml
 sed -i -e 's|#journal_size: .*|journal_size: 100|' ${d}/group_vars/all.yml
 sed -i -e 's|#docker: false|docker: true|' ${d}/group_vars/all.yml
 sed -i -e 's|#ceph_docker_registry: .*|ceph_docker_registry: brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888|' ${d}/group_vars/all.yml

@@ -19,13 +19,21 @@ zarray=($*)
 first=${zarray[0]}
 
 epel_release=${epel_release:-'epel-release-latest-7.noarch.rpm'}
+brew_dir=${brew_dir:-'brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/rhceph'}
+docker_candidate=${docker_candidate:-'ceph-2-rhel-7-docker-candidate-20170516014056'}
+automatically_do_everything=${automatically_do_everything:-'true'}
+
 if [ ! -f ${epel_release} ]; then
     echo "File ${epel_release} does not exist"
     exit -1
 fi
 scp ${epel_release} ${first}:/tmp
-echo "sudo rm -rf /etc/ansible/hosts" | ssh $first
-
+echo "sudo rm -rf /etc/ansible/hosts" | ssh $first 2> /dev/null
+ssh $first ls /var/log/ansible.log 2> /dev/null
+if [ $? -ne 0 ]; then
+    ssh $first sudo touch /var/log/ansible.log
+    ssh $first sudo chmod 0666 /var/log/ansible.log
+fi
 
 #
 # Run setup.sh on all sites
@@ -40,9 +48,12 @@ done
 #
 for x in $cephnodes
 do 
-    echo "ssh-keygen -f /home/ubuntu/.ssh/id_rsa -N ''" | ssh $x
+    echo "ls .ssh/id_rsa.pub" | ssh $x 2> /dev/null
+    if [ $? -ne 0 ]; then
+        echo "ssh-keygen -f /home/ubuntu/.ssh/id_rsa -N ''" | ssh $x
+    fi
 done
-rm -fr /tmp/pubkeys
+rm -fr /tmp/pubkeys 2> /dev/null
 for x in $cephnodes
 do 
     echo "cat /home/ubuntu/.ssh/id_rsa.pub" | ssh -t -y $x >> /tmp/pubkeys
@@ -105,10 +116,16 @@ echo "********************************************************************"> /tm
 echo "Finished with the setup of containers.">> /tmp/done.msg
 echo "Go to ${first} and cd to /usr/share/ceph-ansible Then run">> /tmp/done.msg
 echo "">> /tmp/done.msg
-echo "sudo docker pull brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/rhceph:ceph-2-rhel-7-docker-candidate-20170516014056">> /tmp/done.msg
+echo "sudo docker pull ${brew_dir}:${docker_candidate}">> /tmp/done.msg
 echo "">> /tmp/done.msg
 echo "followed by:">> /tmp/done.msg
 echo "">> /tmp/done.msg
 echo "ansible-playbook --skip-tags=with_pkg site-docker.yml" >> /tmp/done.msg
 >> /tmp/done.msg
-cat /tmp/done.msg
+if [ $automatically_do_everything == 'true' ]; then
+    echo "sudo docker pull ${brew_dir}:${docker_candidate}" | ssh $first
+    echo "cd /usr/share/ceph-ansible; ansible-playbook --skip-tags=with_pkg site-docker.yml" | ssh $first
+    echo "sudo docker exec ceph-mon-${first} ceph -s" | ssh $first
+else
+    cat /tmp/done.msg
+fi
