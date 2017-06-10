@@ -47,11 +47,15 @@ done
 # Makes sure that you can ssh between all sites.
 #
 for x in $cephnodes
+do
+    for y in $cephnodes
+    do
+       echo "sudo sed -i \"/ ubuntu@$x/d\"" /home/ubuntu/.ssh/authorized_keys | ssh $y
+    done
+done
+for x in $cephnodes
 do 
-    echo "ls .ssh/id_rsa.pub" | ssh $x 2> /dev/null
-    if [ $? -ne 0 ]; then
-        echo "ssh-keygen -f /home/ubuntu/.ssh/id_rsa -N ''" | ssh $x
-    fi
+    echo "/usr/bin/ssh-keygen -f /home/ubuntu/.ssh/id_rsa -N ''" | ssh $x
 done
 rm -fr /tmp/pubkeys 2> /dev/null
 for x in $cephnodes
@@ -125,6 +129,7 @@ echo "ansible-playbook --skip-tags=with_pkg site-docker.yml" >> /tmp/done.msg
 if [ $automatically_do_everything == 'true' ]; then
     echo "sudo docker pull ${brew_dir}:${docker_candidate}" | ssh $first
     echo "cd /usr/share/ceph-ansible; ansible-playbook --skip-tags=with_pkg site-docker.yml" | ssh $first
+    sleep 60
     echo "sudo docker exec ceph-mon-${first} ceph -s" | ssh $first
 else
     cat /tmp/done.msg
