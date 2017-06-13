@@ -57,14 +57,15 @@ for x in $cephnodes
 do 
     echo "/usr/bin/ssh-keygen -f /home/ubuntu/.ssh/id_rsa -N ''" | ssh $x
 done
-rm -fr /tmp/pubkeys 2> /dev/null
+rm -rf local_temp 2> /dev/null
+mkdir local_temp 2> /dev/null
 for x in $cephnodes
 do 
-    echo "cat /home/ubuntu/.ssh/id_rsa.pub" | ssh -t -y $x >> /tmp/pubkeys
+    echo "cat /home/ubuntu/.ssh/id_rsa.pub" | ssh -t -y $x >> local_temp/pubkeys
 done
 for x in $cephnodes
 do 
-    scp /tmp/pubkeys $x:/tmp
+    scp local_temp/pubkeys $x:/tmp/pubkeys
     echo "cat /tmp/pubkeys >> /home/ubuntu/.ssh/authorized_keys" | ssh $x
 done
 for x in $cephnodes
@@ -88,18 +89,17 @@ do_setup $first install
 scp editansible.sh $first:/tmp
 ssh $first sudo chmod 0777 /tmp/editansible.sh
 ssh $first /tmp/editansible.sh
-rm -rf /tmp/anshostsinfo
-echo '[mons]' > /tmp/anshostsinfo
+echo '[mons]' > local_temp/anshostsinfo
 for x in $cephnodes
 do
-echo "  $x" >> /tmp/anshostsinfo
+echo "  $x" >> local_temp/anshostsinfo
 done
-echo '[osds]' >> /tmp/anshostsinfo
+echo '[osds]' >> local_temp/anshostsinfo
 for x in $cephnodes
 do
-echo "  $x" >> /tmp/anshostsinfo
+echo "  $x" >> local_temp/anshostsinfo
 done
-scp /tmp/anshostsinfo $first:/tmp
+scp local_temp/anshostsinfo $first:/tmp
 echo "sudo chown ubuntu:ubuntu /etc/ansible/hosts" | ssh $first
 echo "cat /tmp/anshostsinfo >> /etc/ansible/hosts" | ssh $first
 echo "sudo chown root:root /etc/ansible/hosts" | ssh $first
@@ -115,22 +115,23 @@ done
 #
 #  Print instructions for the user to run containers.
 #
-rm -rf /tmp/done.msg
-echo "********************************************************************"> /tmp/done.msg
-echo "Finished with the setup of containers.">> /tmp/done.msg
-echo "Go to ${first} and cd to /usr/share/ceph-ansible Then run">> /tmp/done.msg
-echo "">> /tmp/done.msg
-echo "sudo docker pull ${brew_dir}:${docker_candidate}">> /tmp/done.msg
-echo "">> /tmp/done.msg
-echo "followed by:">> /tmp/done.msg
-echo "">> /tmp/done.msg
-echo "ansible-playbook --skip-tags=with_pkg site-docker.yml" >> /tmp/done.msg
->> /tmp/done.msg
+rm -rf local_temp/done.msg 2> /dev/null
+echo "********************************************************************"> local_temp/done.msg
+echo "Finished with the setup of containers.">> local_temp/done.msg
+echo "Go to ${first} and cd to /usr/share/ceph-ansible Then run">> local_temp/done.msg
+echo "">> local_temp/done.msg
+echo "sudo docker pull ${brew_dir}:${docker_candidate}">> local_temp/done.msg
+echo "">> local_temp/done.msg
+echo "followed by:">> local_temp/done.msg
+echo "">> local_temp/done.msg
+echo "ansible-playbook --skip-tags=with_pkg site-docker.yml" >> local_temp/done.msg
+>> local_temp/done.msg
 if [ $automatically_do_everything == 'true' ]; then
     echo "sudo docker pull ${brew_dir}:${docker_candidate}" | ssh $first
     echo "cd /usr/share/ceph-ansible; ansible-playbook --skip-tags=with_pkg site-docker.yml" | ssh $first
     sleep 60
     echo "sudo docker exec ceph-mon-${first} ceph -s" | ssh $first
 else
-    cat /tmp/done.msg
+    cat local_temp/done.msg
 fi
+rm -rf local_temp 2> /dev/null
