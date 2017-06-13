@@ -6,14 +6,14 @@ Usage: ./containment.sh node1 node2 node3
 
 ## Installation
 
-Install this script in a local directory
+Install this script in a local directory (home directory on magna002, for example).
 
-git clone http://github.com/wusui/container_quick
+git clone http://github.com/wusui/container_quick;
 cd container_quick
 
 ## Description
 
-Run this script from a node that can ssh to the three nodes listed in the parameters.  In the Octo Lab, for instance, this should be run from magna002.
+Make sure that you can passwordlessly ssh to the three nodes listed in the parameters.
 
 This script will bring up 3 mons (1 on each node), 9 osds (3 on each node) and a container node (on node1).  It automatically performs the steps documented in https://docs.google.com/document/d/1a7Hh8NU5HmZ86y5bqSXldgnulL5HuMAMJA3fIL9bDxk/edit
  
