@@ -18,6 +18,7 @@ cephnodes=$*
 zarray=($*)
 first=${zarray[0]}
 
+epel_url=${epel_url:-'https://dl.fedoraproject.org/pub/epel'}
 epel_release=${epel_release:-'epel-release-latest-7.noarch.rpm'}
 brew_dir=${brew_dir:-'brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/rhceph'}
 docker_candidate=${docker_candidate:-'ceph-2-rhel-7-docker-candidate-20170516014056'}
@@ -27,6 +28,8 @@ if [ ! -f ${epel_release} ]; then
     echo "File ${epel_release} does not exist"
     exit -1
 fi
+wget ${epel_url}/${epel_release}
+
 scp ${epel_release} ${first}:/tmp
 echo "sudo rm -rf /etc/ansible/hosts" | ssh $first 2> /dev/null
 ssh $first ls /var/log/ansible.log 2> /dev/null
@@ -135,3 +138,4 @@ else
     cat local_temp/done.msg
 fi
 rm -rf local_temp 2> /dev/null
+rm -rf epel-release* 2> /dev/null
