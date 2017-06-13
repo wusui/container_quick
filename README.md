@@ -19,7 +19,7 @@ This script will bring up 3 mons (1 on each node), 9 osds (3 on each node) and a
  
 This works best on freshly installed magna machines.  If run on a previously installed system, make sure that there are no [mons] or [osds] sections in /etc/ansible/hosts on the container node.
 
-This script will copy the latest epel repo into the container_quick directory.
+If there is an epel rpm file in the current directory with the name specified by the epel_release tunable, then we will use that.  Otherwise, an epel file will be downloaded.
 
 ## Tunable values (bash variables):
 
