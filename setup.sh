@@ -6,9 +6,10 @@
 #
 # start ntpd
 #
+source /tmp/parameters
 sed -i -e 's,^hostname *=.*,hostname = subscription.rhn.stage.redhat.com,;s,baseurl *=.*,baseurl= http://cdn.stage.redhat.com,' /etc/rhsm/rhsm.conf
-subscription-manager register --username=qa@redhat.com --password=redhatqa
-subscription-manager attach --pool=8a85f9823e3d5e43013e3ddd4e2a0977
+subscription-manager register --username=${subscription_user} --password=${subscription_password}
+subscription-manager attach --pool=${subscription_pool}
 subscription-manager repos --disable='*'
 subscription-manager repos --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-rpms
 systemctl enable firewalld

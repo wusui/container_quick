@@ -21,6 +21,12 @@ This works best on freshly installed magna machines.  If run on a previously ins
 
 If there is an epel rpm file in the current directory with the name specified by the epel_release tunable, then we will use that.  Otherwise, an epel file will be downloaded.
 
+## Security
+
+The subscription password is 'unknown' by default.  To set this password, export subscription_password=<password>.  For example, to set the password to 'aardvark', run the following command:
+
+export subscription_password=aardvark
+
 ## Tunable values (bash variables):
 
 * epel_url: address of where to extract the epel rpm from -- defaults to 'https://dl.fedoraproject.org/pub/epel'
@@ -29,3 +35,6 @@ If there is an epel rpm file in the current directory with the name specified by
 * brew_dir: directory containg brew rhceph image -- defaults to 'brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/rhceph'
 * docker_candidate: docker candidate -- defaults to 'ceph-2-rhel-7-docker-candidate-20170516014056'
 * automatically_do_everything: If true, docker pull, ansible-playbook and ceph -s test are done automatically -- defaults to true.  Set this to false if you want to edit yml files before running the playbook.
+* subscription_user: subscription manager user -- defaults to 'qa@redhat.com'
+* subscription_password: subscription manager password -- defaults to 'unknown'
+* subscription_pool: subscription manager pool -- defaults to '8a85f9823e3d5e43013e3ddd4e2a0977'
