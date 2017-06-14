@@ -102,18 +102,16 @@ do_setup $first install
 # Remotely edit ansible yml files and add ceph information to the
 # ansible hosts file
 #
-scp editansible.sh $first:/tmp
-ssh $first sudo chmod 0777 /tmp/editansible.sh
-ssh $first /tmp/editansible.sh
+do_setup $first editansible
 echo '[mons]' > local_temp/anshostsinfo
 for x in $cephnodes
 do
-echo "  $x" >> local_temp/anshostsinfo
+    echo "  $x" >> local_temp/anshostsinfo
 done
 echo '[osds]' >> local_temp/anshostsinfo
 for x in $cephnodes
 do
-echo "  $x" >> local_temp/anshostsinfo
+    echo "  $x" >> local_temp/anshostsinfo
 done
 scp local_temp/anshostsinfo $first:/tmp
 echo "sudo chown ubuntu:ubuntu /etc/ansible/hosts" | ssh $first
