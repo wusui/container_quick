@@ -3,7 +3,7 @@
 # Modify the yml files in /usr/share/ceph-ansible to work for the downstream
 # nodes.
 #
-docker_candidate=${docker_candidate:-'ceph-2-rhel-7-docker-candidate-20170516014056'}
+source /tmp/parameters
 d=/usr/share/ceph-ansible
 sudo chown ubuntu:ubuntu ${d}
 sudo chown ubuntu:ubuntu ${d}/*

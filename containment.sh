@@ -21,8 +21,12 @@ first=${zarray[0]}
 epel_url=${epel_url:-'https://dl.fedoraproject.org/pub/epel'}
 epel_release=${epel_release:-'epel-release-latest-7.noarch.rpm'}
 brew_dir=${brew_dir:-'brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/rhceph'}
+download_node=${download_node:-'http://download-node-02.eng.bos.redhat.com/rcm-guest/ceph-drops/auto/rhscon-2-rhel-7-compose/latest-RHSCON-2-RHEL-7/compose/Installer/x86_64/os/Packages/'}
 docker_candidate=${docker_candidate:-'ceph-2-rhel-7-docker-candidate-20170516014056'}
 automatically_do_everything=${automatically_do_everything:-'true'}
+subscription_user=${subscription_user:-'qa@redhat.com'}
+subscription_password=${subscription_password:-'unknown'}
+subscription_pool=${subscription_pool:-'8a85f9823e3d5e43013e3ddd4e2a0977'}
 
 if [ ! -f ${epel_release} ]; then
     wget ${epel_url}/${epel_release}
@@ -35,12 +39,25 @@ if [ $? -ne 0 ]; then
     ssh $first sudo touch /var/log/ansible.log
     ssh $first sudo chmod 0666 /var/log/ansible.log
 fi
+rm -rf local_temp
+mkdir local_temp
+
+echo "epel_url=${epel_url}" > local_temp/paramters
+echo "epel_release=${epel_release}" >> local_temp/parameters
+echo "brew_dir=${brew_dir}" >> local_temp/parameters
+echo "download_node=${download_node}" >> local_temp/parameters
+echo "docker_candidate=${docker_candidate}" >> local_temp/parameters
+echo "automatically_do_everything=${automatically_do_everything}" >> local_temp/parameters
+echo "subscription_user=${subscription_user}" >> local_temp/parameters
+echo "subscription_password=${subscription_password}" >> local_temp/parameters
+echo "subscription_pool=${subscription_pool}" >> local_temp/parameters
 
 #
 # Run setup.sh on all sites
 #
 for x in $cephnodes
 do 
+    scp local_temp/parameters $x:/tmp/parameters
     do_setup $x setup 
 done
 
@@ -58,8 +75,6 @@ for x in $cephnodes
 do 
     echo "/usr/bin/ssh-keygen -f /home/ubuntu/.ssh/id_rsa -N ''" | ssh $x
 done
-rm -rf local_temp 2> /dev/null
-mkdir local_temp 2> /dev/null
 for x in $cephnodes
 do 
     echo "cat /home/ubuntu/.ssh/id_rsa.pub" | ssh -t -y $x >> local_temp/pubkeys
