@@ -20,7 +20,7 @@ first=${zarray[0]}
 
 epel_url=${epel_url:-'https://dl.fedoraproject.org/pub/epel'}
 epel_release=${epel_release:-'epel-release-latest-7.noarch.rpm'}
-brew_dir=${brew_dir:-'brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888/rhceph'}
+brew_dir=${brew_dir:-'brew-pulp-docker01.web.prod.ext.phx2.redhat.com:8888'}
 download_node=${download_node:-'http://download-node-02.eng.bos.redhat.com/rcm-guest/ceph-drops/auto/rhscon-2-rhel-7-compose/latest-RHSCON-2-RHEL-7/compose/Installer/x86_64/os/Packages/'}
 docker_candidate=${docker_candidate:-'ceph-2-rhel-7-docker-candidate-20170516014056'}
 automatically_do_everything=${automatically_do_everything:-'true'}
@@ -136,14 +136,14 @@ echo "********************************************************************"> loc
 echo "Finished with the setup of containers.">> local_temp/done.msg
 echo "Go to ${first} and cd to /usr/share/ceph-ansible Then run">> local_temp/done.msg
 echo "">> local_temp/done.msg
-echo "sudo docker pull ${brew_dir}:${docker_candidate}">> local_temp/done.msg
+echo "sudo docker pull ${brew_dir}/rhceph:${docker_candidate}">> local_temp/done.msg
 echo "">> local_temp/done.msg
 echo "followed by:">> local_temp/done.msg
 echo "">> local_temp/done.msg
 echo "ansible-playbook --skip-tags=with_pkg site-docker.yml" >> local_temp/done.msg
 >> local_temp/done.msg
 if [ $automatically_do_everything == 'true' ]; then
-    echo "sudo docker pull ${brew_dir}:${docker_candidate}" | ssh $first
+    echo "sudo docker pull ${brew_dir}/rhceph:${docker_candidate}" | ssh $first
     echo "cd /usr/share/ceph-ansible; ansible-playbook --skip-tags=with_pkg site-docker.yml" | ssh $first
     sleep 60
     echo "sudo docker exec ceph-mon-${first} ceph -s" | ssh $first
