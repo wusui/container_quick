@@ -23,9 +23,11 @@ If there is an epel rpm file in the current directory with the name specified by
 
 ## Security
 
-The subscription password is 'unknown' by default.  To set this password, export subscription_password=<password>.  For example, to set the password to 'aardvark', run the following command:
+The subscription password is not set by default.  To set this password, export subscription_password=<password>.  For example, to set the password to 'aardvark', run the following command:
 
 export subscription_password=aardvark
+
+An error message is displayed if subscription_password is not set.
 
 ## Tunable values (bash variables):
 

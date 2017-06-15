@@ -14,6 +14,7 @@ do_setup() {
 # cephnodes -- list of sites passed to this script
 # first -- first site in cephnodes
 #
+dummy=${subscription_password:?Error:\$subscription_password is not defined}
 cephnodes=$*
 zarray=($*)
 first=${zarray[0]}
